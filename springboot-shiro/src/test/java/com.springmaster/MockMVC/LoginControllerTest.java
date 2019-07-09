@@ -55,6 +55,14 @@ public class LoginControllerTest {
         ThreadContext.bind(subject);
     }
 
+    private void adminLogin() {
+        login("user2", "good");
+    }
+
+    private void userLogin() {
+        login("user1", "123456");
+    }
+
     @Before
     public void init() {
         mockHttpServletRequest = new MockHttpServletRequest(webApplicationContext.getServletContext());
@@ -65,7 +73,7 @@ public class LoginControllerTest {
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(webApplicationContext)
                 .build();
-        login("user2", "good");
+        userLogin();
     }
     @Test
     public void testUser() throws Exception {
@@ -74,10 +82,7 @@ public class LoginControllerTest {
                 .param("password", "123456")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-//                .andExpect(MockMvcResultMatchers.content().json("{'key':'value'}"))
-//                .andExpect(MockMvcResultMatchers.jsonPath("$.key").value("value"))
                 .andExpect(MockMvcResultMatchers.content().string("no admin no admin:delete"))
-//                .andDo(MockMvcResultHandlers.print())
                 .andReturn();
         System.out.println(result.getResponse().toString());
     }
@@ -89,23 +94,46 @@ public class LoginControllerTest {
                 .param("password", "good")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-//                .andExpect(MockMvcResultMatchers.content().json("{'key':'value'}"))
-//                .andExpect(MockMvcResultMatchers.jsonPath("$.key").value("value"))
                 .andExpect(MockMvcResultMatchers.content().string("admin admin:delete"))
-//                .andDo(MockMvcResultHandlers.print())
+                .andDo(MockMvcResultHandlers.print())
                 .andReturn();
         System.out.println(result.getResponse().toString());
     }
 
     @Test
+    public void testTestRole() throws Exception {
+        adminLogin();
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/testRole")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().string("testRole success"))
+                .andReturn();
+        System.out.println(result.getResponse().toString());
+        userLogin();
+        result = mockMvc.perform(MockMvcRequestBuilders.post("/testRole")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+    }
+
+    @Test
+    public void testTestRole1() throws Exception {
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/testRole1")
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+    }
+
+    @Test
     public void testIsAdmin() throws Exception {
+        adminLogin();
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/isAdmin")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-//                .andExpect(MockMvcResultMatchers.content().json("{'key':'value'}"))
-//                .andExpect(MockMvcResultMatchers.jsonPath("$.key").value("value"))
                 .andExpect(MockMvcResultMatchers.content().string("admin"))
-//                .andDo(MockMvcResultHandlers.print())
                 .andReturn();
         System.out.println(result.getResponse().toString());
     }

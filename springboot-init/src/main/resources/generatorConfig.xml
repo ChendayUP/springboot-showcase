@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+
+    <!--导入属性配置-->
+    <properties resource="datasource.properties"/>
+
+    <context id="DB2Tables" targetRuntime="MyBatis3">
+
+        <!-- optional，旨在创建class时，对注释进行控制 -->
+        <commentGenerator>
+            <!-- 是否隐瞒日期-->
+            <property name="suppressDate" value="true" />
+            <!-- 是否隐瞒全部注释-->
+            <property name="suppressAllComments" value="true" />
+            <!-- 是否添加数据库备注, 隐瞒全部注释必须关闭, 照成的结果就是显示的注释太繁杂,后期可以通过扩展generator来优化-->
+            <!-- <property name="addRemarkComments" value="true" />-->
+        </commentGenerator>
+
+        <!-- < jdbcConnection /> 数据库连接配置，至关重要-->
+        <jdbcConnection
+                driverClass="${db.driver-class-name}"
+                connectionURL="${db.url}"
+                userId="${db.username}"
+                password="${db.password}" />
+
+        <javaTypeResolver >
+            <property name="forceBigDecimals" value="false" />
+        </javaTypeResolver>
+
+        <!-- <javaModelGenerator /> 指定自动生成的 POJO置于哪个包下-->
+        <javaModelGenerator targetPackage="com.springmaster.pojo" targetProject="./src/main/java">
+            <!-- 是否允许子包，即targetPackage.schemaName.tableName -->
+            <property name="enableSubPackages" value="false" />
+            <!-- 是否对model添加 构造函数 -->
+            <property name="constructorBased" value="true" />
+            <!-- 是否对类CHARt类型的列的数据进行rim 操作-->
+            <property name="trimStrings" value="true" />
+            <!-- 建立的Model对象是否不可改变  即生成的Model对象不会有 setter方法，只有构造方法 -->
+            <property name="immutable" value="false" />
+        </javaModelGenerator>
+
+        <!-- <sqlMapGenerator /> 指定自动生成的 mapper.xml置于哪个包下-->
+        <sqlMapGenerator targetPackage="mappers"  targetProject="src/main/resources">
+            <property name="enableSubPackages" value="false" />
+        </sqlMapGenerator>
+
+        <!-- <javaClientGenerator /> 指定自动生成的 DAO接口置于哪个包下-->
+        <javaClientGenerator targetPackage="com.springmaster.dao" targetProject="src/main/java" type="XMLMAPPER">
+            <property name="enableSubPackages" value="false" />
+        </javaClientGenerator>
+
+        <!-- <table /> 指定数据表名，可以使用_和%通配符-->
+        <!-- tableName 指定了表名-->
+        <!-- domainObjectName 指定了实体类的名称-->
+        <table tableName="user_info"
+                domainObjectName="User"
+                enableCountByExample="false"
+                enableUpdateByExample="false"
+                enableDeleteByExample="false"
+                enableSelectByExample="false"
+                selectByExampleQueryId="false"/>
+        <table tableName="product"
+                domainObjectName="Product"
+                enableCountByExample="false"
+                enableUpdateByExample="false"
+                enableDeleteByExample="false"
+                enableSelectByExample="false"
+                selectByExampleQueryId="false"/>
+
+    </context>
+
+</generatorConfiguration>

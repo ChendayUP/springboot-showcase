@@ -1,7 +1,7 @@
-package com.springmaster;
+package com.springmaster.controller;
 
 import com.springmaster.pojo.User;
-import com.springmaster.service.UserService;
+import com.springmaster.sevice.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
